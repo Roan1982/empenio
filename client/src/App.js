@@ -8,6 +8,7 @@ import SolicitarCotizacion from './pages/SolicitarCotizacion';
 import MisEmpenos from './pages/MisEmpenos';
 import MisCitas from './pages/MisCitas';
 import AdminDashboard from './pages/AdminDashboard';
+import AdminPanel from './pages/AdminPanel';
 import './App.css';
 
 const ProtectedRoute = ({ children, adminOnly = false }) => {
@@ -75,6 +76,14 @@ function App() {
             />
             <Route 
               path="/admin" 
+              element={
+                <ProtectedRoute adminOnly={true}>
+                  <AdminPanel />
+                </ProtectedRoute>
+              } 
+            />
+            <Route 
+              path="/admin-old" 
               element={
                 <ProtectedRoute adminOnly={true}>
                   <AdminDashboard />

@@ -90,6 +90,7 @@ const initialize = () => {
         fecha_vencimiento DATE NOT NULL,
         estado TEXT DEFAULT 'activo',
         renovaciones INTEGER DEFAULT 0,
+        notas TEXT,
         FOREIGN KEY (id_usuario) REFERENCES usuarios(id_usuario),
         FOREIGN KEY (id_objeto) REFERENCES objetos(id_objeto)
       )
@@ -121,6 +122,29 @@ const initialize = () => {
         nueva_fecha_vencimiento DATE NOT NULL,
         FOREIGN KEY (id_empeno) REFERENCES empenos(id_empeno)
       )
+    `);
+
+    // Tabla Configuración
+    db.run(`
+      CREATE TABLE IF NOT EXISTS configuracion (
+        clave TEXT PRIMARY KEY,
+        valor TEXT NOT NULL,
+        descripcion TEXT,
+        fecha_actualizacion DATETIME DEFAULT CURRENT_TIMESTAMP
+      )
+    `);
+
+    // Insertar configuración por defecto
+    db.run(`
+      INSERT OR IGNORE INTO configuracion (clave, valor, descripcion) VALUES
+      ('tasa_interes_mensual', '5', 'Porcentaje de interés mensual'),
+      ('plazo_dias_default', '30', 'Plazo en días por defecto'),
+      ('porcentaje_prestamo', '70', 'Porcentaje del valor del objeto que se presta'),
+      ('dias_gracia', '3', 'Días de gracia después del vencimiento'),
+      ('nombre_empresa', 'Empeño Digital', 'Nombre de la empresa'),
+      ('telefono_contacto', '+57 300 123 4567', 'Teléfono de contacto'),
+      ('email_contacto', 'contacto@empenio.com', 'Email de contacto'),
+      ('direccion', 'Calle Principal #123', 'Dirección física')
     `);
 
     // Insertar admin por defecto
