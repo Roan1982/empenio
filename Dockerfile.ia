@@ -1,0 +1,28 @@
+FROM python:3.11-slim
+
+# Establecer directorio de trabajo
+WORKDIR /app
+
+# Instalar dependencias del sistema
+RUN apt-get update && apt-get install -y \
+    gcc \
+    g++ \
+    && rm -rf /var/lib/apt/lists/*
+
+# Copiar requirements
+COPY ia_module/requirements.txt ./
+
+# Instalar dependencias Python
+RUN pip install --no-cache-dir -r requirements.txt
+
+# Copiar código fuente
+COPY ia_module/ ./
+
+# Entrenar modelo
+RUN python train_model.py
+
+# Exponer puerto
+EXPOSE 5001
+
+# Comando de inicio
+CMD ["python", "api.py"]

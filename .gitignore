@@ -1,0 +1,11 @@
+node_modules/
+.env
+uploads/
+database/*.db
+client/build/
+*.log
+.DS_Store
+__pycache__/
+*.pyc
+ia_module/venv/
+ia_module/.venv/

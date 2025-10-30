@@ -1,0 +1,19 @@
+FROM node:20-alpine
+
+WORKDIR /app
+
+# Copiar package files
+COPY package*.json ./
+
+# Instalar dependencias
+RUN npm install --production
+
+# Copiar código del servidor
+COPY server/ ./server/
+COPY .env ./.env
+
+# Exponer puerto
+EXPOSE 5000
+
+# Comando de inicio
+CMD ["node", "server/index.js"]
