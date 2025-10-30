@@ -28,12 +28,13 @@ const Dashboard = () => {
       const empenosActivos = empenosRes.data.filter(e => e.estado === 'activo');
       const totalPrestado = empenosActivos.reduce((sum, e) => sum + e.monto_prestado, 0);
       const cotizacionesPendientes = cotizacionesRes.data.filter(c => c.estado === 'pendiente').length;
-      const citasPendientes = citasRes.data.filter(c => c.estado === 'pendiente').length;
+      // Citas programadas incluye pendientes Y confirmadas
+      const citasProgramadas = citasRes.data.filter(c => c.estado === 'pendiente' || c.estado === 'confirmada').length;
 
       setStats({
         empenosActivos: empenosActivos.length,
         cotizacionesPendientes,
-        citasProgramadas: citasPendientes,
+        citasProgramadas,
         totalPrestado,
       });
     } catch (error) {

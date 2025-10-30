@@ -91,6 +91,7 @@ const initialize = () => {
         estado TEXT DEFAULT 'activo',
         renovaciones INTEGER DEFAULT 0,
         notas TEXT,
+        codigo_qr TEXT,
         FOREIGN KEY (id_usuario) REFERENCES usuarios(id_usuario),
         FOREIGN KEY (id_objeto) REFERENCES objetos(id_objeto)
       )
@@ -121,6 +122,32 @@ const initialize = () => {
         fecha_renovacion DATE NOT NULL,
         nueva_fecha_vencimiento DATE NOT NULL,
         FOREIGN KEY (id_empeno) REFERENCES empenos(id_empeno)
+      )
+    `);
+
+    // Tabla Pagos
+    db.run(`
+      CREATE TABLE IF NOT EXISTS pagos (
+        id_pago INTEGER PRIMARY KEY AUTOINCREMENT,
+        id_empeno INTEGER NOT NULL,
+        tipo_pago TEXT NOT NULL,
+        monto REAL NOT NULL,
+        metodo_pago TEXT,
+        fecha_pago DATETIME DEFAULT CURRENT_TIMESTAMP,
+        FOREIGN KEY (id_empeno) REFERENCES empenos(id_empeno)
+      )
+    `);
+
+    // Tabla Notificaciones
+    db.run(`
+      CREATE TABLE IF NOT EXISTS notificaciones (
+        id_notificacion INTEGER PRIMARY KEY AUTOINCREMENT,
+        id_usuario INTEGER NOT NULL,
+        tipo TEXT NOT NULL,
+        mensaje TEXT NOT NULL,
+        leida INTEGER DEFAULT 0,
+        fecha_creacion DATETIME DEFAULT CURRENT_TIMESTAMP,
+        FOREIGN KEY (id_usuario) REFERENCES usuarios(id_usuario)
       )
     `);
 

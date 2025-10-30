@@ -2,6 +2,8 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import api from '../services/api';
+import CrearEmpenoModal from '../components/CrearEmpenoModal';
+import NotificationBell from '../components/NotificationBell';
 import './AdminPanel.css';
 
 const AdminPanel = () => {
@@ -26,6 +28,8 @@ const AdminPanel = () => {
   const [showModal, setShowModal] = useState(false);
   const [modalType, setModalType] = useState('');
   const [selectedItem, setSelectedItem] = useState(null);
+  const [showCrearEmpenoModal, setShowCrearEmpenoModal] = useState(false);
+  const [selectedCitaId, setSelectedCitaId] = useState(null);
 
   useEffect(() => {
     loadData();
@@ -105,6 +109,16 @@ const AdminPanel = () => {
     } catch (error) {
       alert('❌ Error al confirmar cita');
     }
+  };
+
+  const crearEmpenoDescrita = (citaId) => {
+    setSelectedCitaId(citaId);
+    setShowCrearEmpenoModal(true);
+  };
+
+  const handleEmpenoCreado = (empeno) => {
+    console.log('Empeño creado:', empeno);
+    loadData(); // Recargar datos
   };
 
   const rechazarCita = async (id, motivo) => {
@@ -293,6 +307,14 @@ const AdminPanel = () => {
                         ❌ Rechazar
                       </button>
                     </div>
+                  )}
+                  {cita.estado === 'confirmada' && (
+                    <button
+                      onClick={() => crearEmpenoDescrita(cita.id_cita)}
+                      className="btn btn-sm btn-primary"
+                    >
+                      💼 Crear Empeño
+                    </button>
                   )}
                 </td>
               </tr>
@@ -560,6 +582,7 @@ const AdminPanel = () => {
           <span className="brand-text">Panel Administrativo</span>
         </div>
         <div className="navbar-user">
+          <NotificationBell />
           <span>👨‍💼 {user?.nombre}</span>
           <button onClick={logout} className="btn btn-outline-light btn-sm">
             🚪 Salir
@@ -644,6 +667,18 @@ const AdminPanel = () => {
           )}
         </main>
       </div>
+
+      {/* Modal para Crear Empeño desde Cita */}
+      {showCrearEmpenoModal && (
+        <CrearEmpenoModal
+          citaId={selectedCitaId}
+          onClose={() => {
+            setShowCrearEmpenoModal(false);
+            setSelectedCitaId(null);
+          }}
+          onCreated={handleEmpenoCreado}
+        />
+      )}
     </div>
   );
 };

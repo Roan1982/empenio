@@ -23,6 +23,7 @@ app.use('/api/empenos', require('./routes/empenos'));
 app.use('/api/citas', require('./routes/citas'));
 app.use('/api/precotizacion', require('./routes/precotizacion'));
 app.use('/api/admin', require('./routes/admin'));
+app.use('/api/workflow', require('./routes/workflow'));
 
 // Servir archivos estáticos del cliente en producción
 if (process.env.NODE_ENV === 'production') {
