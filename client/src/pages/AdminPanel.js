@@ -6,8 +6,8 @@ import CrearEmpenoModal from '../components/CrearEmpenoModal';
 import DetalleObjetoModal from '../components/DetalleObjetoModal';
 import DashboardCharts from '../components/DashboardCharts';
 import NotificationBell from '../components/NotificationBell';
-import jsPDF from 'jspdf';
-import 'jspdf-autotable';
+import { jsPDF } from 'jspdf';
+import autoTable from 'jspdf-autotable';
 import * as XLSX from 'xlsx';
 import './AdminPanel.css';
 
