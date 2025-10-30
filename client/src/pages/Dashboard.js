@@ -131,13 +131,13 @@ const Dashboard = () => {
                   </div>
                 </Link>
 
-                <div className="action-card" style={{ opacity: 0.6, cursor: 'not-allowed' }}>
+                <Link to="/historial" className="action-card">
                   <div className="action-icon">📊</div>
                   <div className="action-title">Historial</div>
                   <div className="action-description">
                     Ver historial completo de empeños anteriores
                   </div>
-                </div>
+                </Link>
               </div>
 
               <div className="card fade-in">

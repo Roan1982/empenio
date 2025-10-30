@@ -7,6 +7,7 @@ import Dashboard from './pages/Dashboard';
 import SolicitarCotizacion from './pages/SolicitarCotizacion';
 import MisEmpenos from './pages/MisEmpenos';
 import MisCitas from './pages/MisCitas';
+import Historial from './pages/Historial';
 import AdminDashboard from './pages/AdminDashboard';
 import AdminPanel from './pages/AdminPanel';
 import './App.css';
@@ -71,6 +72,14 @@ function App() {
               element={
                 <ProtectedRoute>
                   <MisCitas />
+                </ProtectedRoute>
+              } 
+            />
+            <Route 
+              path="/historial" 
+              element={
+                <ProtectedRoute>
+                  <Historial />
                 </ProtectedRoute>
               } 
             />

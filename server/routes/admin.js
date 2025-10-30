@@ -307,6 +307,71 @@ router.get('/objetos', authMiddleware, isAdmin, (req, res) => {
   });
 });
 
+// Obtener detalle completo de un objeto
+router.get('/objetos/:id', authMiddleware, isAdmin, (req, res) => {
+  const { id } = req.params;
+
+  const query = `
+    SELECT o.*, 
+           e.id_empeno,
+           e.estado as estado_empeno,
+           e.monto_prestado,
+           e.interes,
+           e.fecha_inicio as empeno_fecha_inicio,
+           e.fecha_vencimiento,
+           e.renovaciones,
+           u.id_usuario,
+           u.nombre as propietario,
+           u.dni as dni_propietario,
+           u.contacto as contacto_propietario,
+           p.resultado_valor as resultado_ia,
+           p.confianza as confianza_ia
+    FROM objetos o
+    LEFT JOIN empenos e ON o.id_objeto = e.id_objeto AND e.estado = 'activo'
+    LEFT JOIN usuarios u ON o.id_usuario_propietario = u.id_usuario
+    LEFT JOIN precotizaciones p ON o.id_objeto = p.id_objeto
+    WHERE o.id_objeto = ?
+  `;
+
+  db.get(query, [id], (err, objeto) => {
+    if (err) {
+      console.error('Error al obtener objeto:', err);
+      return res.status(500).json({ error: 'Error en el servidor' });
+    }
+
+    if (!objeto) {
+      return res.status(404).json({ error: 'Objeto no encontrado' });
+    }
+
+    // Parsear fotos si es string JSON
+    if (objeto.fotos && typeof objeto.fotos === 'string') {
+      try {
+        objeto.fotos = JSON.parse(objeto.fotos);
+      } catch (e) {
+        objeto.fotos = [];
+      }
+    }
+
+    // Organizar información del empeño si existe
+    if (objeto.id_empeno) {
+      objeto.empeno_info = {
+        id_empeno: objeto.id_empeno,
+        monto_prestado: objeto.monto_prestado,
+        interes: objeto.interes,
+        fecha_inicio: objeto.empeno_fecha_inicio,
+        fecha_vencimiento: objeto.fecha_vencimiento,
+        renovaciones: objeto.renovaciones
+      };
+    }
+
+    // Limpiar campos duplicados
+    delete objeto.id_empeno;
+    delete objeto.empeno_fecha_inicio;
+
+    res.json(objeto);
+  });
+});
+
 // Buscar objetos por tipo, marca o modelo
 router.get('/objetos/buscar', authMiddleware, isAdmin, (req, res) => {
   const { q } = req.query;
