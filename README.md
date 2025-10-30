@@ -32,19 +32,29 @@ Sistema completo de gestión de empeños con **módulo de Inteligencia Artificia
 - **RandomForestRegressor** - Modelo de regresión
 - **pandas + numpy** - Procesamiento de datos
 
+## 🎨 Nuevas Características v2.0
+
+- 📊 **Dashboard con gráficos Chart.js** - 4 gráficos interactivos + 4 KPIs
+- 📄 **Exportación a PDF/Excel** - Reportes profesionales con múltiples formatos
+- 👁️ **Modal de detalle de objetos** - Galería multimedia con lightbox fullscreen
+- 🔍 **Filtros avanzados** - Búsqueda en tiempo real en todas las secciones
+- 📋 **Historial completo** - Visualización de empeños pasados con filtros
+- 📥 **Exportación CSV** - Descarga datos de citas, historial y más
+
 ## 📋 Requisitos Previos
 
 **¿No tienes nada instalado?** Ejecuta `iniciar.bat` y te guiará automáticamente.
 
-### Opción 1: Instalación Normal (Recomendada)
+### Opción 1: Docker (Recomendada - Más Fácil)
+- **Docker Desktop** - [Descargar aquí](https://www.docker.com/products/docker-desktop/)
+- Todo se ejecuta en contenedores, sin instalar Node.js ni Python
+- Ver guía completa en `DEPLOYMENT.md`
+
+### Opción 2: Instalación Normal
 - **Node.js** >= 16.x - [Descargar aquí](https://nodejs.org/)
 - **Python** >= 3.8 - [Descargar aquí](https://www.python.org/)
 - **npm** (viene con Node.js)
 - **pip** (viene con Python)
-
-### Opción 2: Docker (Contenedores Aislados)
-- **Docker Desktop** - [Descargar aquí](https://www.docker.com/products/docker-desktop/)
-- Node.js y Python se ejecutarán SOLO en contenedores
 
 ### Opción 3: Portables (Sin Instalación)
 - Lee `INSTALACION_SIN_DEPENDENCIAS_GLOBALES.md`
@@ -82,19 +92,49 @@ Abre http://localhost:3000
 
 ---
 
-### 🐳 Método 3: Docker (Sin Node.js/Python local)
+### 🐳 Método 3: Docker (Recomendado - Sin Node.js/Python local)
 
 **Paso 1: Instalar Docker Desktop**
 https://www.docker.com/products/docker-desktop/
 
-**Paso 2: Reiniciar tu PC**
-
-**Paso 3: Ejecutar**
-```cmd
-docker-start.bat
+**Paso 2: Clonar el repositorio**
+```bash
+git clone https://github.com/Roan1982/empenio.git
+cd empenio
 ```
 
-Abre http://localhost:3000
+**Paso 3: Construir y levantar contenedores**
+```bash
+docker-compose build --no-cache
+docker-compose up -d
+```
+
+**Paso 4: Instalar dependencias del frontend** (IMPORTANTE)
+```bash
+docker exec empenio-frontend-1 npm install chart.js react-chartjs-2 jspdf jspdf-autotable xlsx --legacy-peer-deps
+docker-compose restart frontend
+```
+
+**Paso 5: Poblar la base de datos** (40 usuarios + datos de prueba)
+```bash
+docker cp server/seed-40-usuarios.js empenio-backend-1:/app/
+docker exec empenio-backend-1 node seed-40-usuarios.js
+```
+
+**Resultado:**
+- ✅ 40 usuarios creados
+- ✅ ~80 objetos
+- ✅ ~45 citas
+- ✅ ~20 empeños (estados variados)
+- ✅ ~13 pagos
+- ✅ ~80 notificaciones
+
+**Acceso:**
+- Frontend: http://localhost:3000
+- Admin: admin@empenio.com / admin123
+- Usuarios: Ver `LISTA_USUARIOS_COMPLETA.md` (password: password123)
+
+📖 **Guía completa:** Ver `DEPLOYMENT.md` para troubleshooting
 
 ---
 
